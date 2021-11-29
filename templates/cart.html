@@ -1,0 +1,77 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="{% static 'style.css' %}">
+</head>
+<body>
+{% include 'header.html' %}
+<h1>Оформление заказа</h1>
+<div class="cart-content">
+    {% for q in quantity %}
+        <div class="cart-item">
+            <div class="pizza-name-counter">
+                <div class="cart-pizza-name">{{ q.pizza.name }}</div>
+                <div class="button-counter">
+                    <button id="{{ forloop.counter }}" class="decrement">-</button>
+                    <input type="text" class="counter" value="{{ q.quantity }}" readonly>
+                    <button id="{{ forloop.counter }}" class="increment">+</button>
+                    <input type="hidden" value="{{ q.pizza.price }}" id="{{ q.id }}" class="pizza-price">
+                </div>
+            </div>
+
+            <p id="{{ q.id }}" class="total-pizza-price"></p> BYN
+        </div>
+    {% endfor %}
+    <div class="cart-item">
+        <h1>К оплате:</h1>
+        <p id="total-price" class="total-price"></p> BYN
+    </div>
+    <button id="order" class="order">Продолжить оформление</button>
+</div>
+
+<div class="modal-wrapper" id="modal-wrapper">
+    <div id="myModal" class="modal">
+        <div class="modal-inner">
+            <div class="modal-header">
+                <h1 class="modal-window-header">Адрес доставки:</h1>
+                <span class="close">&times;</span>
+            </div>
+            <form action="/cart" method="post">
+                {% csrf_token %}
+                <div class="modal-content">
+                    <label>Улица: <input type="text" class="street" required name="street"></label>
+                    <label>Дом: <input type="text" class="building" required name="house"></label>
+                    <label>Подъезд: <input type="text" class="building" name="entrance"></label>
+                    <label>Этаж: <input type="text" class="building" name="floor"></label>
+                    <label>Квартира: <input type="text" class="building" name="room"></label>
+                    <label>Имя: <input type="text" class="name" required name="name"></label>
+                    <label>Фамилия: <input type="text" class="name" required name="surname"></label>
+                </div>
+                <div class="payment-header">
+                    <h1 class="modal-window-header">Способ оплаты:</h1>
+                </div>
+
+                <div class="payment">
+                    <label><input type="radio" name="payment" required value="Наличные">Наличные</label>
+                    <label><input type="radio" name="payment" required value="Банковская карта">Банковская карта
+                    </label>
+                </div>
+                <div class="modal-content">
+                    <label>Контактный номер: <input type="tel" class="phone-number" required
+                                                    name="phone-number"></label>
+                </div>
+
+                <div class="button-confirm">
+                    <button id="order" class="order">Оформить заказ</button>
+                </div>
+            </form>
+
+        </div>
+    </div>
+</div>
+<script src="{% static 'main.js' %}"></script>
+</body>
+</html>

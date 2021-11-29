@@ -1,0 +1,42 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Главная</title>
+    <link rel="stylesheet" href="{% static 'style.css' %}">
+</head>
+<body>
+{% include 'header.html' %}
+
+
+<div class="content">
+
+    {% for p in pizza %}
+        <div class="pizza-card">
+
+            <img src="{{ p.picture.url }}" class="pizza-card-image"/>
+            <span class="pizza-name">{{ p.name }}</span>
+
+            <span class="pizza-description">{{ p.description }}</span>
+            <div class="pizza-card-footer">
+
+                <ul class="price-weight">
+                    <li>{{ p.price }}</li>
+                    <li class="pizza-weight">{{ p.weight }}</li>
+                </ul>
+                <form action="." method="post" class="button-add-to-cart">
+                    {% csrf_token %}
+                    <input type="hidden" name="pizza" value="{{ p.id }}">
+                    <button class="button-add-to-cart">В корзину</button>
+                </form>
+
+            </div>
+        </div>
+    {% endfor %}
+</div>
+
+{% include 'footer.html' %}
+
+</body>
+</html>
